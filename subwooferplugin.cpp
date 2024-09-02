@@ -72,7 +72,11 @@ SubwooferPlugin::SubwooferPlugin()
     : Effect()
 {
     m_instance = this;
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSettings settings;
+#else
     QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+#endif
     setLevel(settings.value("Subwoofer/level", 10).toUInt());
     m_cutoff = settings.value("Subwoofer/cutoff", 250).toUInt();
 }
