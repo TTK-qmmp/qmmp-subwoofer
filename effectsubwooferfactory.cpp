@@ -4,7 +4,11 @@
 
 #include <QMessageBox>
 
+#if (QMMP_VERSION_INT < 0x10700) || (0x20000 <= QMMP_VERSION_INT && QMMP_VERSION_INT < 0x20200)
 const EffectProperties EffectSubwooferFactory::properties() const
+#else
+EffectProperties EffectSubwooferFactory::properties() const
+#endif
 {
     EffectProperties properties;
     properties.name = tr("Subwoofer Plugin");
@@ -19,10 +23,17 @@ Effect *EffectSubwooferFactory::create()
     return new SubwooferPlugin();
 }
 
+#if (QMMP_VERSION_INT < 0x10700) || (0x20000 <= QMMP_VERSION_INT && QMMP_VERSION_INT < 0x20200)
 void EffectSubwooferFactory::showSettings(QWidget *parent)
 {
     (new SettingsDialog(parent))->show();
 }
+#else
+QDialog *EffectSubwooferFactory::createSettings(QWidget *parent)
+{
+    return new SettingsDialog(parent);
+}
+#endif
 
 void EffectSubwooferFactory::showAbout(QWidget *parent)
 {
