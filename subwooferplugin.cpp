@@ -1,7 +1,11 @@
 #include "subwooferplugin.h"
 
-#include <qmath.h>
+#include <cmath>
 #include <QSettings>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846	/* pi */
+#endif
 
 static BiquadSCoefs coefs[STAGE_LENGTH] = {
     {1.0, 1.931851652578, 1.0, 0.0, 0.0, 1.0},
@@ -11,7 +15,7 @@ static BiquadSCoefs coefs[STAGE_LENGTH] = {
 
 static void biquadBilinearDesign(BiquadZCoefs *out, const BiquadSCoefs *in, float omega)
 {
-    const float t = 2.0 * tan(omega * M_PI / 2);
+    const float t = 2.0 * std::tan(omega * M_PI / 2);
     const float v = (4.0 * in->a + 2.0 * in->b * t + in->c * t * t);
 
     out->a2 = (4.0 * in->a - 2.0 * in->b * t + in->c * t * t) / v;
@@ -62,7 +66,7 @@ static float butterworth6Process(BiquadBuffer *buf, const BiquadZCoefs *in, floa
 
 static float shaitan(float x)
 {
-    return 2.5 * atan(0.9 * x) + 2.5 * sqrt(1 - pow(0.9 * x,  2)) - 2.5;
+    return 2.5 * std::atan(0.9 * x) + 2.5 * std::sqrt(1 - std::pow(0.9 * x,  2)) - 2.5;
 }
 
 
@@ -73,9 +77,9 @@ SubwooferPlugin::SubwooferPlugin()
 {
     m_instance = this;
 #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    QSettings settings;
+    const QSettings settings;
 #else
-    QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+    const QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
 #endif
     setLevel(settings.value("Subwoofer/level", 10).toUInt());
     m_cutoff = settings.value("Subwoofer/cutoff", 250).toUInt();
