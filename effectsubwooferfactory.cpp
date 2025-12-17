@@ -39,7 +39,7 @@ void EffectSubwooferFactory::showAbout(QWidget *parent)
 {
     QMessageBox::about(parent, tr("About Subwoofer Effect Plugin"),
                        tr("Qmmp Subwoofer Effect Plugin") + "\n"+
-                       tr("Written by: Ilya Kotov <forkotov02@ya.ru>"));
+                       tr("Written by: Greedysky <greedysky@163.com>"));
 }
 
 QString EffectSubwooferFactory::translation() const
